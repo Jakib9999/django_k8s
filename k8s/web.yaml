@@ -16,11 +16,13 @@ spec:
     spec:
       containers:
         - name: myapp
-          image: web_img
+          image: application
           imagePullPolicy: Never
           ports:
             - containerPort: 8000
-
+          envFrom:
+          - configMapRef:
+              name: web-config
 ---
 apiVersion: v1
 kind: Service
