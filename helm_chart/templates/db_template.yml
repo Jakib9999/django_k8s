@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name}}-mysql-deployment 
+  labels:
+    {{- toYaml .Values.db.labels | nindent 4 }}
+spec:
+  replicas: {{ .Values.db.replicas}}
+  selector:
+    matchLabels:
+     {{- toYaml .Values.db.labels | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- toYaml .Values.db.labels | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Values.db.container.name}}
+          image: {{ .Values.db.container.image.name }}
+          ports:
+            - containerPort: {{ .Values.db.container.port}}
+          envFrom:
+          - configMapRef:
+              name: {{ .Values.db.config.name }}
+          
+       
+
+ 
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Values.web.config.data.DATABASE_HOST}}
+spec:
+  selector:
+    {{- toYaml .Values.db.labels | nindent 4 }}
+  ports:
+  - protocol: {{ .Values.db.service.protocol}}
+    port: {{ .Values.db.service.port}}
+    targetPort: {{ .Values.db.container.port }} 

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-myapp-deployment
+  labels:
+    {{- toYaml .Values.web.labels | nindent 4 }}
+spec:
+  replicas: {{ .Values.web.replicas}}
+  selector:
+    matchLabels:
+       {{- toYaml .Values.web.labels | nindent 6 }}
+  template:
+    metadata:
+      labels:
+         {{- toYaml .Values.web.labels | nindent 8 }}
+    spec:
+      initContainers:
+      - name: {{ .Values.web.initcontainer.name}}
+        image: {{.Values.web.initcontainer.image.name}} 
+        command: {{ .Values.web.initcontainer.command}}
+      containers:
+      - name: {{ .Values.web.container.name}}
+        image: {{ .Values.web.container.image.name}}
+        imagePullPolicy: {{ .Values.web.container.image.pullPolicy}}
+        ports:
+          - containerPort: {{ .Values.web.container.port}}
+        envFrom:
+          - configMapRef:
+              name: {{ .Values.web.config.name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Release.Name}}-appservice
+  labels:
+    {{- toYaml .Values.web.labels | nindent 4 }}
+spec:
+  type: {{ .Values.web.service.type}}
+  selector:
+   {{- toYaml .Values.web.labels | nindent 6 }}
+  ports:
+    - port: {{ .Values.web.service.port }}
+      targetPort: {{ .Values.web.container.port}}

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.web.config.name }}
+    
+data:
+   {{- toYaml .Values.web.config.data | nindent 4 }}
