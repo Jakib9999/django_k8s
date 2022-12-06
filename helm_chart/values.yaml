@@ -5,7 +5,7 @@ web:
      name: myapp
    container:
      image:
-       name: application
+       name: apps
        pullPolicy: Never
      name: myapp
      port: 8000
@@ -17,9 +17,9 @@ web:
      command: "['sh', '-c', 'echo Waiting for db service ! && sleep 30']"
 
    service:
-     type: NodePort
+     type: ClusterIP
      port: 8000
-   
+     name: appservice   
    config:
      name: webconfig
      data:
@@ -53,3 +53,14 @@ db:
         MYSQL_DATABASE:  mydb
         MYSQL_USER: user
         MYSQL_PASSWORD: password
+
+
+ingress:
+ 
+  hosts:
+    name1: abc.com   
+  service:
+    svc1:
+     name: appservice
+     port: 8000
+        
