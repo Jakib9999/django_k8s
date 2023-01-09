@@ -25,7 +25,7 @@ SECRET_KEY = 'e&p+y(*+mwh6372^90*8&4bs1y1dj*dik#o*l2x@x#s#_jsp%a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
