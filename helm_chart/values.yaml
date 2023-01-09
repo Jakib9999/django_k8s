@@ -5,7 +5,7 @@ web:
      name: myapp
    container:
      image:
-       name: apps
+       name: application
        pullPolicy: Never
      name: myapp
      port: 8000
